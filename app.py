@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 #Connect to the Database
-app.config['SQLALCHEMY_DATABASE_URI']='postgresql://katya:IamN01b01dy@localhost/datacollecter'
+app.config['SQLALCHEMY_DATABASE_URI']='postgresql://katya:pass@localhost/datacollecter'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db = SQLAlchemy(app)
 
