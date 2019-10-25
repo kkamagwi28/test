@@ -12,16 +12,14 @@ db = SQLAlchemy(app)
 
 class Data(db.Model):
     #create a table
-    __tablename__ = "data"
-    id = db.Column(db.Integer, primary_key = True)
-    height = db.Column(db.Integer)
-    weight = db.Column(db.Integer)
-    shoesize = db.Column(db.Integer)
+    __tablename__ = "lids"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    email = db.Column(db.String)
 
-    def __init__(self, height, weight, shoesize):
-        self.height = height
-        self.weight = weight
-        self.shoesize = shoesize
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
 
 #Define Route and Contant of that page
 @app.route("/")
@@ -32,10 +30,9 @@ def index():
 @app.route("/success", methods = ['POST'])
 def success():
     if(request.method == 'POST'):
-        height_ = request.form["height"]
-        weight_ = request.form["weight"]
-        shoesize_ = request.form["shoesize"]
-        data = Data(height_,weight_,shoesize_)
+        name_ = request.form["name"]
+        email_ = request.form("email")
+        data = Data(name_, email_)
         db.session.add(data)
         db.session.commit()
         return render_template("success.html")
