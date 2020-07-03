@@ -1,0 +1,21 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>iStudy</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  
+    {% include "base/header.html" %}
+   
+<main>
+
+    {% include "base/nav.html" %}
+ 
+<content>
+{% include "base/content.html" %}
+</content>
+</main>
+</body>
+</html>
