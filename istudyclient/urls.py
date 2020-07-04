@@ -20,5 +20,7 @@ from base import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
-    path('webinars', views.webinars)
+    path('main', views.index),
+    path('webinars', views.webinars),
+    path('courses', views.courses),
 ]

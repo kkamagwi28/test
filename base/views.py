@@ -6,3 +6,7 @@ def index(request):
 
 def webinars(request):
     return render(request, "base/video.html")
+
+
+def courses(request):
+    return render(request, "base/courses.html")
