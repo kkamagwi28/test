@@ -14,7 +14,11 @@
     {% include "base/nav.html" %}
  
 <content>
-{% include "base/content.html" %}
+
+    {% for page in index %}
+    <div>{{page.page_context}}</div>
+    {% endfor %}
+
 </content>
 </main>
 </body>

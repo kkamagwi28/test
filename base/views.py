@@ -1,8 +1,10 @@
 from django.shortcuts import render
+from .models import indexPage
 
 
 def index(request):
-    return render(request, "base/index.html")
+    index = indexPage.objects.all()
+    return render(request, "base/index.html", {'index': index})
 
 def webinars(request):
     return render(request, "base/video.html")
@@ -10,3 +12,6 @@ def webinars(request):
 
 def courses(request):
     return render(request, "base/courses.html")
+
+def python(request):
+    return render(request, "base/python/python_index.html")
