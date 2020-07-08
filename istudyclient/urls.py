@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from base import views
+from django.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
     path('main', views.index),
     path('webinars', views.webinars),
-    path('courses', views.courses),
+    path('courses1', views.courses),
+    path('courses/', include('courses.urls'), name='courses'),
 ]

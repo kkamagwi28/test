@@ -13,5 +13,4 @@ def webinars(request):
 def courses(request):
     return render(request, "base/courses.html")
 
-def python(request):
-    return render(request, "base/python/python_index.html")
+
