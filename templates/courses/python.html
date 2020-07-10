@@ -1,0 +1,43 @@
+<!-- если авторизован -->
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>iStudy</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  
+    {% include "base/header.html" %}
+   
+<main>
+
+    {% include "base/nav.html" %}
+ 
+<content>
+
+{%for course in courses %}
+    <h2>{{course.name}}</h2>
+    {{course.silabus}}
+    {{course.certificate_example}}
+    {{course.date_of_start }}
+    {{course.author}}
+    {{course.goal}}
+    {{course.tasks}}
+    {{course.slag}}
+    {{course.reviews}}
+{% endfor %}
+
+        Вылезает форма с оплатой
+
+        <a href="courses/lessons">Приступить к обучению</a>
+
+</li>
+
+<!-- если не авторизован -->
+перенаправление на авторизайию или регистрацию
+
+</content>
+</main>
+</body>
+</html>

@@ -14,9 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.conf.urls import url
 from courses import views
 
+app_name = 'courses'
+
 urlpatterns = [
-    path('python_index/', views.python, name="python_index"),
+    url(r'^$', views.courses, name="courses"),
+    url('python/', views.course, name="python"),
+    url(r'^(?P<order>[0-9]+)$', views.lessons, name="lessons"),
 ]

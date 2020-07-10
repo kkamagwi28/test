@@ -7,10 +7,6 @@ def index(request):
     return render(request, "base/index.html", {'index': index})
 
 def webinars(request):
-    return render(request, "base/video.html")
-
-
-def courses(request):
-    return render(request, "base/courses.html")
+    return render(request, "base/webinars.html")
 
 

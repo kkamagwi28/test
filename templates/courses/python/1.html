@@ -1,0 +1,39 @@
+<!-- если авторизован -->
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>iStudy</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  
+    {% include "base/header.html" %}
+   
+<main>
+
+    {% include "base/nav.html" %}
+ 
+<content>
+
+Вввод в терминале происходит через функцию input()
+Для того чтобы сохранить введенные данные необходимо ввести переменную. 
+Например
+x = input()
+ 
+
+<style>
+    html, body, iframe { height: 100%; }
+    html { overflow: hidden; }
+</style>
+{% for lesson in lessons %}
+<h1>{{lesson.title}}</h1>
+<div>{{lesson.context}}</div>
+<iframe src="{{lesson.iframe.link}}"  width="100%" scrolling="yes" frameborder="0">Загрузка…</iframe>
+{% endfor %}
+перейти к заданию
+
+</content>
+</main>
+</body>
+</html>
