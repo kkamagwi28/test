@@ -22,5 +22,6 @@ app_name = 'courses'
 urlpatterns = [
     url(r'^$', views.courses, name="courses"),
     url('python/', views.course, name="python"),
-    url(r'^(?P<order>[0-9]+)$', views.lessons, name="lessons"),
+    url(r'^(?P<course_id>[0-9]+)$', views.lessons, name="lessons"),
+    url('lesson/new/', views.lesson_new, name='lesson_new')
 ]
