@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}{{tag.name}}{% endblock %}
+{% block content %}
+
+
+<form  method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="formGroupExampleInput" class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">
+      </div>
+      <div class="mb-3">
+        <label for="formGroupExampleInput2" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" id="formGroupExampleInput2" placeholder="Another input placeholder">
+      </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-default">Login</button>
+    </div>
+</form>
+
+{% endblock %}
