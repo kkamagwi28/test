@@ -38,7 +38,7 @@ class GitCloner:
 
             # go into folder with .git file of repo
             try:
-                os.chdir(f'{project_folder}/')
+                os.chdir(f'{project_folder}')
                 branches = os.popen('pwd')
                 self.current_folder_git = os.path.abspath(os.getcwd())
                 current_folder_git = branches.readlines()
