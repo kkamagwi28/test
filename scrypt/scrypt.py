@@ -1,103 +1,90 @@
+import os
+import re
+import requests
+
 from django.conf import settings
-import os, re, time, json
-
-
-"""
-ssh-keygen -t rsa
-'git config --system http.sslCAInfo /home/javl/git-certs/cert.pem'   
-
-"""
 
 
 class GitCloner:
+    github_api_url = github_url = "https://api.github.com"
+
     def __init__(self, *args):
-        pass
+        self.repo_url = None
 
-    def clone_project(self, source_url, source_id):
-        # get repo name
-        split = re.split('/', source_url)
-        project_folder = split[-1][:-4]
+    def _get_reppo_url(self, repo_url):
+        self.repo_url = repo_url
 
-        # change directory to repos
-        print(f'Your project folder is {project_folder}')
-        os.chdir('repos/')
-        branches = os.popen('pwd')
-        current_folder = branches.readlines()[0]
-        print(f'Your current folder is {current_folder}')
+    @property
+    def branches(self) -> list:
+        owner_repo = self.repo_url.replace("https://github.com/", "").replace(".git", "")
+        endpoint = f"/repos/{owner_repo}/branches"
+        r = requests.get(f"{self.github_api_url}{endpoint}")
+        rj = r.json()
+        return [r['name'] for r in rj]
 
-        # making project folder and change location to it
-        try:
-            os.makedirs(f'{project_folder}')
-            os.chdir(f'{project_folder}/')
-            branches = os.popen('pwd')
-            current_folder = branches.readlines()[0]
-            print(f'Your current folder for project is {current_folder}')
+    def if_branch(self, branch):
+        if branch in self.branches:
+            return True
+        else:
+            return False
 
-            os.popen(f'git clone {source_url}')
-            self.clone = 'Repository is cloning, you can press push button'
-
-            # go into folder with .git file of repo
-            try:
-                os.chdir(f'{project_folder}')
-                branches = os.popen('pwd')
-                self.current_folder_git = os.path.abspath(os.getcwd())
-                current_folder_git = branches.readlines()
-                print(f'Your current folder for project with previous .git  {current_folder_git}')
-
-                os.system(f'git remote add s{source_id} {source_url}')
-                # change directory to BASE django dir to help django find its own info
-                os.chdir(settings.BASE_DIR)
-            except Exception as e:
-
-                self.clone_exeption = str(e)
-                os.chdir(settings.BASE_DIR)
-        except OSError:
-            self.update = 'Press push button to update repository'
+    def switch_branch(self, branch, s_or_d, id, repo_dir):
+        if branch(branch):
+            os.chdir(repo_dir)
+            os.system(f'git checkout --track {s_or_d}{id}/{branch}')
             os.chdir(settings.BASE_DIR)
 
-    def updating_branch(self, source_url, source_branch, source_id, destination_branch):
-        split = re.split('/', source_url)
-        project_folder = split[-1][:-4]
-        os.chdir(f'repos/{project_folder}/{project_folder}/')
-        branches = os.popen('pwd')
-        current_folder_git = branches.readlines()[0]
-        print(f'Your current folder for project with previous .git  {current_folder_git}')
-        os.system(f'git pull s{source_id} {source_branch}')
-        os.system(f'git fetch s{source_id}')
-        os.system(f'git checkout --track s{source_id}/{source_branch}')
-        os.system(
-            f'git push d{source_id} refs/remotes/s{source_id}/{source_branch}:refs/remotes/d{source_id}/{destination_branch}')
-        self.updated = "Your repository has been updated"
-        os.chdir(settings.BASE_DIR)
-
-
-    def creating_branch(self, source_url, source_branch, destination_repo_adress, destination_branch,
-                        destination_id):
-        # getting back to project folder
-        split = re.split('/', source_url)
-        project_folder = split[-1][:-4]
-        os.chdir(f'repos/{project_folder}/{project_folder}/')
-        r = os.popen('pwd')
-        current_folder_git = r.readlines()
-        print(f'You are working in  {current_folder_git}')
-
-        r = os.popen(f'git checkout {source_branch}')
-        self.current_branch = r.readlines()
-        print(self.current_branch)
-
-        os.system(f'git remote add d{destination_id} {destination_repo_adress}')
-        # no output if everything is ok
-        os.system(f'git fetch d{destination_id}')
-
-        os.system(f'git branch -M {destination_branch}')
-        # no output if everything is ok
-
-        r = os.popen('git status')
-        self.status = r.readlines()
-        r = os.popen(f'git push d{destination_id} {destination_branch}')
-        self.done = r.readlines()
+    def clone_repo(self, source_repo, qwery, id, repo_dir):
+        os.chdir('/repos')
+        # if cloned before, just update branch
+        cloned = [project.source_url for project in qwery]
+        if source_repo in qwery:
+            return self.update_repo()
+        dirs = [name for name in os.listdir(".") if os.path.isdir(name)]
+        # if new repo check folders name
+        # if we have same name add _new
+        os.makedirs(repo_dir)
+        # clone repo
+        os.chdir(repo_dir)
+        os.popen(f'git clone {source_repo}')
+        os.system(f'git remote add s{id} {source_repo}')
 
         os.chdir(settings.BASE_DIR)
 
+    def push_repo(self, source_repo, qwery, id, repo_dir, source_branch, destination_repo_adress, destination_branch):
+        if os.path.isdir(repo_dir):
+            # if branch exists, if no switch branch
+            if self.if_branch():
+                # if everything is ok push repo
+                os.chdir(repo_dir)
+                os.system(f'git checkout {source_branch}')
+                os.system(f'git remote add d{id} {destination_repo_adress}')
+                os.system(f'git fetch d{id}')
+                os.system(f'git branch -M {destination_branch}')
+                os.system(f'git push d{id} {destination_branch}')
+            else:
+                self.switch_branch()
+        # if no clone repo
+        elif not os.path.isdir(repo_dir):
+            self.clone_repo(source_repo, qwery, id, repo_dir)
+        os.chdir(settings.BASE_DIR)
 
+    def update_repo(self, source_repo, qwery, id, repo_dir, source_branch, destination_repo_adress, destination_branch):
+        if os.path.isdir(repo_dir):
+            # if branch exists, if no switch branch
+            if self.if_branch():
+                # if everything is ok push repo
+                os.chdir(repo_dir)
+                os.system(f'git pull s{id} {source_branch}')
+                os.system(f'git fetch s{id}')
+                os.system(f'git checkout --track s{id}/{source_branch}')
+                os.system(
+                    f'git push d{id} refs/remotes/s{id}/{source_branch}:refs/remotes/d{id}/{destination_branch}')
+            else:
+                self.switch_branch()
+        # if no clone repo
+        elif not os.path.isdir(repo_dir):
+            self.clone_repo(source_repo, qwery, id, repo_dir)
+        os.chdir(settings.BASE_DIR)
+        os.chdir(settings.BASE_DIR)
 
