@@ -15,7 +15,7 @@ class Project(models.Model):
     def repo_dir(self):
         split = re.split('/', self.source_url)
         project_folder = split[-1][:-4]
-        dirs = [name for name in os.listdir(".") if os.path.isdir(name)]
+        dirs = [name for name in os.listdir("repos/") if os.path.isdir(f'repos/{name}')]
         new_dir = project_folder
         while new_dir in dirs:
             new_dir = f'new_{new_dir}'
