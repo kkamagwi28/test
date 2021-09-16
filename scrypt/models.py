@@ -13,7 +13,7 @@ class Project(models.Model):
     source_name = models.CharField(max_length=100)
     source_url = models.URLField(max_length=255)
     source_workbench = models.CharField(max_length=100)
-    folder = models.CharField(max_length=255, default='/repos')
+    folder = models.CharField(max_length=255, default='repos/')
 
     def __str__(self) -> str:
         return f'{self.destination_name}'
@@ -32,5 +32,5 @@ def repo_dir(sender, instance, **kwargs):
     if instance.source_url in cloned:
         new_dir = project_folder
 
-    folder = f'repos/{project_folder}/{new_dir}'
+    folder = f'{project_folder}/{new_dir}'
     sender.objects.filter(pk=instance.pk).update(folder=folder)
