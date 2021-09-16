@@ -1,9 +1,8 @@
 import requests
-import asyncio
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import ProjectForm, PushForm
 from .models import Project
-from django.http import HttpResponseNotFound
 from .scrypt import GitCloner
 from django.contrib.auth.decorators import login_required
 
@@ -22,7 +21,9 @@ def get_repository_url(request):
             project = form.save(commit=False)
             project.save()
             if requests.codes.OK:
-                gitcloner.clone_project(project.source_url, project.pk)
+                gitcloner.clone_repo(project.id, projects, project.folder,
+                                     project.source_url, project.source_workbench,
+                                     project.destination_url, project.destination_workbench)
                 return redirect('push_code', id=project.pk)
     else:
         form = ProjectForm()
@@ -35,20 +36,23 @@ def get_repository_url(request):
 @login_required
 def push_to_repo(request, id):
     project = get_object_or_404(Project, pk=id)
+    projects = Project.objects.all()
 
     if request.method == 'POST':
         if requests.codes.OK:
-            if project.source_url in Project.objects.all():
-                gitcloner.updating_branch(project.source_url,
+            if project.source_url in projects:
+                gitcloner.update_repo(project.source_url,
                                           project.source_workbench,
                                           project.pk,
                                           project.destination_workbench)
             else:
-                gitcloner.creating_branch(project.source_url,
-                                          project.source_workbench,
-                                          project.destination_url,
-                                          project.destination_workbench,
-                                          project.pk)
+                gitcloner._get_reppo_url(project.source_url)
+                gitcloner.push_repo(project.source_url,
+                                      projects, project.id,
+                                      project.folder,
+                                      project.source_workbench,
+                                      project.destination_url,
+                                      project.destination_workbench)
                         
             form = PushForm(request.POST)
     else:
@@ -77,9 +81,12 @@ def delete_project(request, pk):
     try:
         project = Project.objects.get(id=pk)
         project.delete()
+        gitcloner.delete_repo(project.source_url)
         return redirect('repos')
     except Project.DoesNotExist:
-        return HttpResponseNotFound("<h2>News not found</h2>")
+        return redirect('repos')
+
+
 
 
 @login_required
