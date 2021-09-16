@@ -61,6 +61,7 @@ class GitCloner:
                                     If repository exists check branch name in {self.branches}\n
                                     If everything is ok contact system administrator to check
                                     access level"""
+        os.chdir(settings.BASE_DIR)
 
     def push_repo(self, source_repo, qwery, id, repo_dir, source_branch, destination_repo, destination_branch):
         try:
@@ -86,13 +87,14 @@ class GitCloner:
                 self.clone_repo(id, qwery, repo_dir, source_repo, source_branch, destination_repo, destination_branch)
                 # self.push_repo(source_repo, qwery, id, repo_dir, source_branch, destination_repo, destination_branch)
             print('Customer repository has been updated')
-            os.chdir(settings.BASE_DIR)
+
             self.push_info = 'Repository has been pushed'
         except:
             self.push_info = f"""You have some mistake\n Check repository info\n 
                                 If repository exists check branch name in {self.branches}\n
                                 If everything is ok contact system administrator to check
                                 access level"""
+        os.chdir(settings.BASE_DIR)
 
     def update_repo(self, source_repo, qwery, id, repo_dir, source_branch, destination_repo_adress, destination_branch):
         try:
@@ -114,13 +116,14 @@ class GitCloner:
             elif not os.path.isdir(repo_dir):
                 self.clone_repo(source_repo, qwery, id, repo_dir)
                 self.update_repo(source_repo, qwery, id, repo_dir, source_branch, destination_repo_adress, destination_branch)
-            os.chdir(settings.BASE_DIR)
+
             self.update_info = 'Repository has been updated'
         except:
             self.update_info = f"""You have some mistake\n Check repository info\n 
                                 If repository exists check branch name in {self.branches}\n
                                 If everything is ok contact system administrator to check
                                 access level"""
+        os.chdir(settings.BASE_DIR)
 
     def delete_repo(self, source_repo):
         split = re.split('/', source_repo)
