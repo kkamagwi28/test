@@ -92,7 +92,6 @@ class GitCloner:
                 self.clone_repo(id, qwery, repo_dir, source_repo, source_branch, destination_repo, destination_branch)
                 # self.push_repo(source_repo, qwery, id, repo_dir, source_branch, destination_repo, destination_branch)
 
-            self.push_info = 'Repository has been pushed'
         except:
             self.push_info = f"""You have some mistake\n Check repository info\n 
                                 If repository exists check branch name in {self.branches}\n
