@@ -19,6 +19,7 @@ def get_repository_url(request):
 
         if form.is_valid():
             project = form.save(commit=False)
+            gitcloner._get_reppo_url(project.source_url)
             project.save()
             if requests.codes.OK:
                 gitcloner.clone_repo(project.id, projects, project.folder,
@@ -37,6 +38,7 @@ def get_repository_url(request):
 def push_to_repo(request, id):
     project = get_object_or_404(Project, pk=id)
     projects = Project.objects.all()
+    gitcloner._get_reppo_url(project.source_url)
 
     if request.method == 'POST':
         if requests.codes.OK:
@@ -46,7 +48,6 @@ def push_to_repo(request, id):
                                           project.pk,
                                           project.destination_workbench)
             else:
-                gitcloner._get_reppo_url(project.source_url)
                 gitcloner.push_repo(project.source_url,
                                       projects, project.id,
                                       project.folder,
