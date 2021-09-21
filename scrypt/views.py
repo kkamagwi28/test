@@ -93,7 +93,7 @@ def delete_project(request, pk):
 @login_required
 def instructions(request):
 
-    with open('/.ssh/id_rsa.pub', 'r') as f:
+    with open('/usr/local/share/.ssh/id_rsa.pub', 'r') as f:
         rpub = f.read()
 
     return render(request, 'scrypt/instructions.html', {'file': rpub})
