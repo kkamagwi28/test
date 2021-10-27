@@ -1,6 +1,9 @@
 from pipe.server.pipe import HTTPPipe
 from django.http.response import HttpResponseBase, HttpResponse
 from django.views import View
+from pipe.core.base import Step
+from frozendict import frozendict
+from django.db.models.query import QuerySet
 
 
 class DjangoHttpPipe(HTTPPipe):
@@ -25,3 +28,18 @@ class PipeView(View):
             return self.http_method_not_allowed(request, *args, **kwargs)
 
         return result
+
+
+class EDataBase(Step):
+
+    def __init__(self, queryset):
+        self.queryset = queryset
+
+    def get_qweryset_object(self, request):
+        if not issubclass(self.queryset.__class__, QuerySet):
+            raise Exception('qweryset property should be a subclass of QuerySet')
+
+        return self.queryset
+
+    def extract(self, request) -> frozendict:
+        return HttpResponse(self.get_qweryset_object(request))
