@@ -31,9 +31,7 @@ class PipeView(View):
 
 
 class EDataBase(Step):
-
-    def __init__(self, queryset):
-        self.queryset = queryset
+    queryset: QuerySet
 
     def get_qweryset_object(self, request):
         if not issubclass(self.queryset.__class__, QuerySet):
