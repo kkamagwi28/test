@@ -33,9 +33,6 @@ class PipeView(View):
 class EDataBase(Step):
     queryset: QuerySet
 
-    def __init__(self, response_method):
-        self.response_method = response_method
-
     def get_qweryset_object(self, request):
         if not isinstance(self.queryset, QuerySet):
             raise Exception('qweryset property should be a subclass of QuerySet')
@@ -43,4 +40,4 @@ class EDataBase(Step):
         return self.queryset
 
     def extract(self, request):
-        return self.response_method(self.get_qweryset_object(request))
+        return self.get_qweryset_object(request)
