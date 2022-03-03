@@ -4,7 +4,7 @@
 	<title>Data Collector</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+	<link rel="icon" type="image/png" href="../static/images/icons/favicon.ico"/>
 	<link rel="stylesheet" type="text/css" href="../static/css/main.css">
 </head>
 <body>
@@ -12,21 +12,17 @@
 		<div class="wrap-contact100">
 			<form class="contact100-form validate-form" action="{{url_for('success')}}" method="POST">
 				<span class="contact100-form-title">
-					Data Collector
+					Добро пожаловать!
+                    Если вы хотите скачать материалы на тему ... , то заполните форму
 				</span>
 
 				<div class="wrap-input100 validate-input" data-validate="Name is required">
-					<input class="input100" type="text" name="height" placeholder="Height (cm)">
+					<input class="input100" type="text" name="name" placeholder="Как к вам обращаться?">
 					<span class="focus-input100"></span>
 				</div>
 
 				<div class="wrap-input100 validate-input" data-validate="Name is required">
-					<input class="input100" type="text" name="weight" placeholder="Weight (kg)">
-					<span class="focus-input100"></span>
-				</div>
-
-				<div class="wrap-input100 validate-input" data-validate="Name is required">
-					<input class="input100" type="text" name="shoesize" placeholder="Shoe Size">
+					<input class="input100" type="text" name="email" placeholder="Введите адрес своей электронной почты">
 					<span class="focus-input100"></span>
 				</div>
 
@@ -35,7 +31,7 @@
 						<div class="contact100-form-bgbtn"></div>
 							<button class="contact100-form-btn" type="submit">
 								<span>
-								Submit
+								Готово
 								</span>
 							</button>
 					</div>
